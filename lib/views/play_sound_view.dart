@@ -1,4 +1,6 @@
 import 'package:ashbal_almihrab_app/helper/colors.dart';
+import 'package:ashbal_almihrab_app/widgets/label_audio_info.dart';
+import 'package:ashbal_almihrab_app/widgets/my_sized_box.dart';
 import 'package:ashbal_almihrab_app/widgets/my_text.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -13,17 +15,6 @@ class PlaySoundView extends StatelessWidget {
     player.setSourceAsset(path);
   }
 
-  playPause() {
-    if (isPlaying) {
-      player.pause();
-      isPlaying = false;
-    } else {
-      // player.play
-      //   player.play(Source("assets/images/Alikhlas.mp3"));
-      isPlaying = true;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,58 +23,12 @@ class PlaySoundView extends StatelessWidget {
       body: SizedBox(
         width: double.infinity,
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Container(
-                  height: 390,
-                  width: 279,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: const AssetImage(
-                              "assets/images/quraa/Mishal_Alhdad.jpg"),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                              AppColors.main, BlendMode.multiply)),
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(200),
-                          bottomRight: Radius.circular(200)),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black54,
-                          offset: Offset(0, 20),
-                          blurRadius: 30,
-                          spreadRadius: 0,
-                        ),
-                      ]),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      MyText(
-                        text: "سورة الفاتحة",
-                        color: Colors.white,
-                        fontSize: 20,
-                        // textAlign: TextAlign.right,
-                      ),
-                      SizedBox(
-                        width: 180,
-                        child: MyText(
-                          text: "القارئ مشعل الحداد",
-                          color: Colors.white,
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-
-                          // textAlign: TextAlign.right,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      )
-                    ],
-                  ),
-                ),
+                LabelAudioInfo(),
                 Positioned(
                   bottom: -45,
                   left: -40,
@@ -114,70 +59,67 @@ class PlaySoundView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: -100,
-                  child: IconButton(
-                    onPressed: () {
-                      player.play(
-                        AssetSource("sounds/Alikhlas.mp3"),
-                      );
-                    },
-                    icon: Icon(Icons.play_arrow),
-                  ),
-                ),
-                Positioned(
-                  bottom: -130,
-                  right: 30,
-                  child: Row(
-                    children: [
-                      const IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.skip_previous,
-                          color: Colors.black,
-                        ),
-                        iconSize: 60,
-                      ),
-                      Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(0, 5),
-                                blurRadius: 15,
-                              ),
-                            ]),
-                        child: IconButton(
-                          onPressed: () {
-                            AudioPlayer audioPlayer = AudioPlayer();
-                            audioPlayer
-                                .play(AssetSource("sounds/Alikhlas.mp3"));
-                          },
-                          icon: const Icon(Icons.pause_circle_filled),
-                          iconSize: 60,
-                        ),
-                      ),
-                      const IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.skip_next,
-                          color: Colors.black,
-                        ),
-                        iconSize: 60,
-                      ),
-                    ],
-                  ),
-                ),
+
                 //     DraggableScrollableSheet(builder: (context, scrollController) {
                 //    return
                 //       );
                 //     })
               ],
             ),
+            MyVerticalSizedBox(
+              height: 80,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.skip_previous,
+                    color: Colors.black,
+                  ),
+                  iconSize: 60,
+                ),
+                Container(
+                  decoration:
+                      const BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 5),
+                      blurRadius: 15,
+                    ),
+                  ]),
+                  child: IconButton(
+                    onPressed: () {
+                      playAndPauseAudio();
+                    },
+                    icon: const Icon(Icons.pause_circle_filled),
+                    iconSize: 60,
+                  ),
+                ),
+                const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.skip_next,
+                    color: Colors.black,
+                  ),
+                  iconSize: 60,
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void playAndPauseAudio() {
+    if (isPlaying) {
+      isPlaying = false;
+      player.pause();
+    } else {
+      isPlaying = true;
+      player.play(AssetSource("sounds/Alikhlas.mp3"));
+    }
   }
 }
